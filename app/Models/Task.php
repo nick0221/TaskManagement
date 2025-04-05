@@ -15,6 +15,7 @@ class Task extends Model
         'published_at',
         'published',
         'subtask',
+        'user_id'
     ];
 
 
