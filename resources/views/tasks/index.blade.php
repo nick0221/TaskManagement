@@ -102,7 +102,7 @@
                                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                                         <img src="{{ $task->image_path }}"
                                              class="h-auto max-w-full"
-                                             width="40"/>
+                                             width="40" alt="task image"/>
                                     </td>
                                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                                         {{ $task->limitedTitle }}
@@ -230,7 +230,7 @@
     </div>
 
     <script>
-         
+
 
         document.addEventListener('alpine:init', () => {
             Alpine.data('modal', () => ({

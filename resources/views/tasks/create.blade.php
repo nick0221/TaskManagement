@@ -25,7 +25,7 @@
                                 <div class="mb-5">
                                     <label for="title"
                                            class="block mb-2 text-sm font-medium text-gray-900">Title</label>
-                                    <textarea rows="4" name="title"
+                                    <textarea id="title" rows="4" name="title"
                                               class="form-input w-full rounded-lg focus:ring-blue-500 focus:border-blue-500   "
                                     >{{ old('title') }}</textarea>
                                     @error('title')
@@ -36,7 +36,7 @@
                                 <div class="mb-5">
                                     <label for="content"
                                            class="block mb-2 text-sm font-medium text-gray-900  ">Content</label>
-                                    <textarea rows="6" name="content"
+                                    <textarea id="content" rows="6" name="content"
                                               class="form-input w-full rounded-lg focus:ring-blue-500 focus:border-blue-500   "
                                     >{{ old('content') }}</textarea>
                                     @error('content')

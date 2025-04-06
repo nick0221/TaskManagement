@@ -52,7 +52,7 @@
                                 <div class="flex-col space-y-3">
                                     <div class="flex justify-center mb-3 ">
                                         <img src="{{ $task->image_path }}" width="130"
-                                             class="h-auto max-w-full rounded-lg"/>
+                                             class="h-auto max-w-full rounded-lg" alt="task image"/>
 
                                     </div>
                                     <div class="flex justify-center ">
