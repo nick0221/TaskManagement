@@ -8,7 +8,6 @@
 
     <div class="py-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 
                 <div class="p-6 text-gray-900">
@@ -26,10 +25,10 @@
                     </div>
 
                     <div class="relative overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200 border">
+                        <table class="min-w-full divide-y divide-gray-200 border ">
                             <thead>
                             <tr>
-                                 
+
                                 <th class="px-6 py-3 bg-gray-50 text-left">
                                 <span
                                     class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Img</span>
@@ -88,41 +87,40 @@
 
 
                                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
-                                        {{--                                        <div class="inline-flex rounded-md shadow-sm" role="group">--}}
-                                        {{--                                            --}}{{-- View Button--}}
-                                        {{--                                            <x-task-components.view-button taskId="{{$task->id}}">--}}
-                                        {{--                                                <i class="far fa-eye"></i>--}}
-                                        {{--                                            </x-task-components.view-button>--}}
+                                        <div class="inline-flex rounded-md shadow-sm" role="group">
+                                            <x-task-components.view-button taskId="{{$task->id}}">
+                                                <i class="far fa-eye"></i>
+                                            </x-task-components.view-button>
 
-                                        {{--                                            --}}{{-- Edit Button--}}
-                                        {{--                                            <x-task-components.edit-button taskId="{{$task->id}}"--}}
-                                        {{--                                                                           isAuthorize="{{$task->isAuthorizeToEdit($task)}}">--}}
-                                        {{--                                                <i class="fas fa-edit"></i>--}}
-                                        {{--                                            </x-task-components.edit-button>--}}
+                                            {{--                                            --}}{{-- Edit Button--}}
+                                            {{--                                            <x-task-components.edit-button taskId="{{$task->id}}"--}}
+                                            {{--                                                                           isAuthorize="{{$task->isAuthorizeToEdit($task)}}">--}}
+                                            {{--                                                <i class="fas fa-edit"></i>--}}
+                                            {{--                                            </x-task-components.edit-button>--}}
 
-                                        {{--                                            --}}{{-- To-do Button--}}
-                                        {{--                                            <x-task-components.todo-button taskId="{{$task->id}}"--}}
-                                        {{--                                                                           isAuthorize="{{$task->handlePolicyMarkAsTodo($task)}}">--}}
-                                        {{--                                                <i class="far fa-clipboard-list-check"></i>--}}
-                                        {{--                                            </x-task-components.todo-button>--}}
+                                            {{--                                            --}}{{-- To-do Button--}}
+                                            {{--                                            <x-task-components.todo-button taskId="{{$task->id}}"--}}
+                                            {{--                                                                           isAuthorize="{{$task->handlePolicyMarkAsTodo($task)}}">--}}
+                                            {{--                                                <i class="far fa-clipboard-list-check"></i>--}}
+                                            {{--                                            </x-task-components.todo-button>--}}
 
-                                        {{--                                            --}}{{-- In Progress Button--}}
-                                        {{--                                            <x-task-components.inprogress-button taskId="{{$task->id}}"--}}
-                                        {{--                                                                                 isAuthorize="{{$task->handlePolicyMarkInProgress($task)}}">--}}
-                                        {{--                                                <i class="far fa-business-time"></i>--}}
-                                        {{--                                            </x-task-components.inprogress-button>--}}
+                                            {{--                                            --}}{{-- In Progress Button--}}
+                                            {{--                                            <x-task-components.inprogress-button taskId="{{$task->id}}"--}}
+                                            {{--                                                                                 isAuthorize="{{$task->handlePolicyMarkInProgress($task)}}">--}}
+                                            {{--                                                <i class="far fa-business-time"></i>--}}
+                                            {{--                                            </x-task-components.inprogress-button>--}}
 
-                                        {{--                                            --}}{{-- Done Button--}}
-                                        {{--                                            <x-task-components.done-button taskId="{{$task->id}}"--}}
-                                        {{--                                                                           isAuthorize="{{$task->handlePolicyMarkDone($task)}}">--}}
-                                        {{--                                                <i class="fas fa-clipboard-check text-green-900"></i>--}}
-                                        {{--                                            </x-task-components.done-button>--}}
+                                            {{--                                            --}}{{-- Done Button--}}
+                                            {{--                                            <x-task-components.done-button taskId="{{$task->id}}"--}}
+                                            {{--                                                                           isAuthorize="{{$task->handlePolicyMarkDone($task)}}">--}}
+                                            {{--                                                <i class="fas fa-clipboard-check text-green-900"></i>--}}
+                                            {{--                                            </x-task-components.done-button>--}}
 
-                                        {{--                                            <!-- Trash button with modal trigger -->--}}
-                                        {{--                                            <x-task-components.trash-button taskId="{{$task->id}}">--}}
-                                        {{--                                                <i class="fas fa-trash"></i>--}}
-                                        {{--                                            </x-task-components.trash-button>--}}
-                                        {{--                                        </div>--}}
+                                            {{--                                            <!-- Trash button with modal trigger -->--}}
+                                            {{--                                            <x-task-components.trash-button taskId="{{$task->id}}">--}}
+                                            {{--                                                <i class="fas fa-trash"></i>--}}
+                                            {{--                                            </x-task-components.trash-button>--}}
+                                        </div>
 
                                     </td>
                                 </tr>
@@ -194,5 +192,37 @@
         </div>
     </div>
 
+    <script>
+        document.getElementById('perPage').addEventListener('change', function () {
+            this.form.submit();
+        });
+
+
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('modal', () => ({
+                showModal: false,
+                openModal() {
+                    this.showModal = true;
+                },
+                closeModal() {
+                    this.showModal = false;
+                },
+            }));
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('popup-modal');
+            const toggleBtn = document.querySelector('[data-modal-toggle="popup-modal"]');
+            const closeBtn = document.querySelector('[data-modal-hide="popup-modal"]');
+
+            toggleBtn.addEventListener('click', () => {
+                modal.classList.toggle('hidden');
+            });
+
+            closeBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+        });
+    </script>
 
 </x-app-layout>

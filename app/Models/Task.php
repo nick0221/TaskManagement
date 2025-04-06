@@ -5,13 +5,17 @@ namespace App\Models;
 use App\Enums\PublishStatus;
 use Carbon\Carbon;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class Task extends Model
 {
+    use HasFactory, SoftDeletes;
+
     protected $fillable = [
         'title',
         'content',
