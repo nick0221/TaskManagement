@@ -17,7 +17,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-
+    Route::patch('/tasks/{id}/status/{progress}', [TaskController::class, 'upStatus'])->name('tasks.patch.status');
     Route::resources([
         'tasks' => TaskController::class,
     ]);

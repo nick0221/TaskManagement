@@ -4,12 +4,12 @@ namespace App\Http\Requests;
 
 use App\Enums\PublishStatus;
 use App\Enums\TaskStatus;
+use App\Rules\CheckUniqueTaskTitle;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
-class TaskStoreRequest extends FormRequest
+class TaskUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,15 +19,6 @@ class TaskStoreRequest extends FormRequest
         return true;
     }
 
-    public function prepareForValidation(): void
-    {
-        // Convert the title to lowercase before validation
-        $this->merge([
-            'title' => strtolower($this->input('title')),
-        ]);
-    }
-
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -35,25 +26,34 @@ class TaskStoreRequest extends FormRequest
      */
     public function rules(): array
     {
+        $taskId = $this->route('task');
+        $currentTitle = $this->input('title');
+
         return [
             'title' => [
                 'required',
                 'min:3',
                 'max:100',
-                Rule::unique('tasks')->where(function ($query) {
-                    // Get the authenticated user's ID
-                    $userId = Auth::id();
-                    // Add a condition to check uniqueness only within the user's task records
-                    return $query->where('user_id', $userId);
-                }),
+                new CheckUniqueTaskTitle($taskId, $currentTitle),
             ],
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:1048',
-            'content' => 'required|min:3',
-            'published' => Rule::in(PublishStatus::toSelectArray()),
-            'status' => Rule::in(TaskStatus::toSelectArray())
-
+            'content' => [
+                'required',
+                'min:3',
+            ],
+            'image' => [
+                'image',
+                'mimes:jpeg,png,jpg,gif',
+                'max:4096', //4MB Max size
+            ],
+            'published' => [
+                Rule::in(array_keys(PublishStatus::toSelectArray())),
+            ],
+            'status' => [
+                Rule::in(array_keys(TaskStatus::toSelectArray())),
+            ],
         ];
     }
+
 
     public function messages(): array
     {

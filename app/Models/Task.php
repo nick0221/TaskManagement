@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\PublishStatus;
 use App\Enums\TaskStatus;
+use App\Policies\TaskPolicy;
 use Carbon\Carbon;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -94,6 +95,43 @@ class Task extends Model
     {
         return $record->status !== TaskStatus::DONE;
     }
+
+    public function handlePolicyMarkAsTodo(Task $record): bool
+    {
+        $user = $this->user;
+
+        if (!$user) {
+            return false; //  handle the case when user is null
+        }
+
+        return $record->status == TaskStatus::IN_PROGRESS ||
+            !app(TaskPolicy::class)->markTodo($user, $record);
+    }
+
+    public function handlePolicyMarkInProgress(Task $record): bool
+    {
+        $user = $this->user;
+        if (!$user) {
+            return false; //handle the case when user is null
+        }
+
+        return $record->status == TaskStatus::TODO ||
+            !app(TaskPolicy::class)->markInProgress($user, $record);
+    }
+
+    public function handlePolicyMarkDone(Task $record): bool
+    {
+        $user = $this->user;
+
+        if (!$user) {
+            return false; //handle the case when user is null
+        }
+
+        return $record->status == TaskStatus::TODO ||
+            $record->status == TaskStatus::IN_PROGRESS ||
+            !app(TaskPolicy::class)->markDone($user, $record);
+    }
+
 
     public function getDiffTimeAttribute(): string
     {

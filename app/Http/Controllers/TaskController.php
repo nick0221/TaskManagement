@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PublishStatus;
 use App\Enums\TaskStatus;
 use App\Http\Requests\TaskStoreRequest;
+use App\Http\Requests\TaskUpdateRequest;
 use App\Models\Task;
 use Exception;
 use Illuminate\Contracts\View\View;
@@ -11,6 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 
 class TaskController extends Controller
@@ -86,11 +89,11 @@ class TaskController extends Controller
         return view('tasks.show', compact('task'));
     }
 
+
     public function edit(Request $request)
     {
         $task = Task::find($request->task);
         Gate::authorize('update', $task);
-
 
         if ($task) {
             return view('tasks.edit', compact('task'));
@@ -101,6 +104,72 @@ class TaskController extends Controller
             flash()->success('Failed to edit!');
             return back();
         }
+    }
+
+    public function update(TaskUpdateRequest $request, Task $task): RedirectResponse
+    {
+        Gate::authorize('update', $task);
+        $validated = $request->validated();
+
+        // Store the image
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+
+            $imageName = uniqid().'.'.$image->getClientOriginalExtension();
+            $image->storeAs('task-images', $imageName, 'public'); // Store the image in the 'task-images' directory
+            $validated['image'] = $imageName;
+        }
+
+        $validated['published'] = $request->published ?? 0;
+        $task->update($validated);
+
+
+        /** @phpstan-ignore-next-line */
+        flash()->success('Data has been successfully updated!');
+        return back();
+    }
+
+
+    public function upStatus($id, $progress): RedirectResponse
+    {
+        $task = Task::find($id);
+
+        if ($task === null) {
+            return back()->withErrors('Task not found.');
+        }
+
+        $checkStatus = TaskStatus::hasValue($progress);
+        if ($checkStatus) {
+            /** @var string $progress */
+            $task->status = $progress;
+            $task->save();
+
+            /** @phpstan-ignore-next-line */
+            flash()->success("Task <b>{$task->limitedTitle}</b> has been set as <b>{$progress}</b>.");
+
+
+        } else {
+            $task->published = PublishStatus::fromValue(PublishStatus::PUBLISHED)->toValueBool(true);
+            $task->save();
+
+            /** @phpstan-ignore-next-line */
+            flash()->success("Task <b>{$task->limitedTitle}</b> has been <b>published</b>.");
+
+        }
+
+        return back();
+    }
+
+
+    public function destroy(Task $task): RedirectResponse
+    {
+        // Delete the task instance (soft delete)
+        $task->delete();
+        $title = Str::words($task->title, 3);
+
+        /** @phpstan-ignore-next-line */
+        flash()->success("Task {$title} has been moved to trash.");
+        return back();
     }
 
 
