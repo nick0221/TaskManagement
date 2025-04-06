@@ -47,7 +47,7 @@ class TaskStoreRequest extends FormRequest
                     return $query->where('user_id', $userId);
                 }),
             ],
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:1048',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:4048',//4MB Max size
             'content' => 'required|min:3',
             'published' => Rule::in(PublishStatus::toSelectArray()),
             'status' => Rule::in(TaskStatus::toSelectArray())

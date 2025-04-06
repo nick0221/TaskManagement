@@ -12,7 +12,7 @@
                 <div class="py-4 flex justify-start px-5">
                     <a href="{{ url()->previous() ?? route('tasks.index') }}"
                        class="px-3 py-2 text-xs font-medium text-center text-blue-700 rounded-lg focus:ring-4 focus:outline-none focus:ring-blue-300  ">
-                        <i class="fal fa-arrow-left"></i> Back
+                        <i class="fas fa-arrow-left"></i> Back
                     </a>
                 </div>
                 <div class="p-6 text-gray-900 ">

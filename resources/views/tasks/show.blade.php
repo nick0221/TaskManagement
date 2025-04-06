@@ -13,7 +13,7 @@
                     <div class="py-4 flex justify-start px-5 col-span-4">
                         <a href="{{ url()->previous() ?? route('tasks.index') }}"
                            class="px-3 py-2 text-xs font-medium text-center text-blue-700 rounded-lg focus:outline-none  ">
-                            <i class="fal fa-arrow-left"></i> Back
+                            <i class="fas fa-arrow-left"></i> Back
                         </a>
                     </div>
                     <div class="text-right py-5 px-8 ">
@@ -50,14 +50,12 @@
 
                             </div>
                             <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-300">
-                            <div class="mb-5  relative overflow-x-auto max-h-[448px]">
+                            <div class="mb-5 relative max-h-[448px] overflow-y-auto">
                                 <label for="content"
-                                       class="block mb-2 text-sm  font-medium  text-gray-600">Content</label>
-                                <label class="text-justify">
+                                       class="block mb-2 text-sm font-medium text-gray-600">Content</label>
+                                <label class="text-justify break-words">
                                     {{ $task->content }}
-
                                 </label>
-
                             </div>
                         </div>
                         <div class="col-span-1 ">
