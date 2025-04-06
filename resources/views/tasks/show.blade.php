@@ -50,14 +50,12 @@
 
                             </div>
                             <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-300">
-                            <div class="mb-5  relative overflow-x-auto max-h-[448px]">
+                            <div class="mb-5 relative max-h-[448px] overflow-y-auto">
                                 <label for="content"
-                                       class="block mb-2 text-sm  font-medium  text-gray-600">Content</label>
-                                <label class="text-justify">
+                                       class="block mb-2 text-sm font-medium text-gray-600">Content</label>
+                                <label class="text-justify break-words">
                                     {{ $task->content }}
-
                                 </label>
-
                             </div>
                         </div>
                         <div class="col-span-1 ">
