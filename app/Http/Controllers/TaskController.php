@@ -163,7 +163,7 @@ class TaskController extends Controller
 
     public function destroy(Task $task): RedirectResponse
     {
-        // Delete the task instance (soft delete)
+        // Delete the task (soft delete)
         $task->delete();
         $title = Str::words($task->title, 3);
 
