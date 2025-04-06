@@ -79,7 +79,7 @@
                                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                                         {{ $task->publishedStr  }}
                                     </td>
-                                    <td class="whitespace-no-wrap text-sm text-center text-yellow-500">
+                                    <td class="whitespace-no-wrap text-sm text-center">
                                         <span
                                             class="{{ TaskStatus::fromValue($task->status)->color($task->status) }}">{{ $task->status }}</span>
 
@@ -88,15 +88,16 @@
 
                                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                                         <div class="inline-flex rounded-md shadow-sm" role="group">
+                                            {{-- View Button--}}
                                             <x-task-components.view-button taskId="{{$task->id}}">
                                                 <i class="far fa-eye"></i>
                                             </x-task-components.view-button>
 
-                                            {{--                                            --}}{{-- Edit Button--}}
-                                            {{--                                            <x-task-components.edit-button taskId="{{$task->id}}"--}}
-                                            {{--                                                                           isAuthorize="{{$task->isAuthorizeToEdit($task)}}">--}}
-                                            {{--                                                <i class="fas fa-edit"></i>--}}
-                                            {{--                                            </x-task-components.edit-button>--}}
+                                            {{-- Edit Button--}}
+                                            <x-task-components.edit-button taskId="{{$task->id}}"
+                                                                           isAuthorize="{{$task->isAuthorizeToEdit($task)}}">
+                                                <i class="fas fa-edit"></i>
+                                            </x-task-components.edit-button>
 
                                             {{--                                            --}}{{-- To-do Button--}}
                                             {{--                                            <x-task-components.todo-button taskId="{{$task->id}}"--}}

@@ -41,10 +41,10 @@ final class TaskStatus extends Enum
     public function color(string $value): string
     {
         return match ($value) {
-            self::IN_PROGRESS => 'bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400',
-            self::TODO => 'bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-700 dark:text-yellow-300 border border-yellow-300',
-            self::DONE => 'bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400',
-            default => 'bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500',
+            self::IN_PROGRESS => 'bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded  ',
+            self::TODO => 'bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded ',
+            self::DONE => 'bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded  ',
+            default => 'bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded  ',
         };
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\PublishStatus;
+use App\Enums\TaskStatus;
 use Carbon\Carbon;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -89,6 +90,10 @@ class Task extends Model
         return PublishStatus::fromValue($publishedValue)->label($publishedValue);
     }
 
+    public function isAuthorizeToEdit(Task $record): bool
+    {
+        return $record->status !== TaskStatus::DONE;
+    }
 
     public function getDiffTimeAttribute(): string
     {
@@ -104,4 +109,6 @@ class Task extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+
 }

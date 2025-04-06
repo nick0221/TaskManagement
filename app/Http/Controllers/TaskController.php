@@ -81,8 +81,24 @@ class TaskController extends Controller
 
     public function show(Task $task)
     {
-        
+
         return view('tasks.show', compact('task'));
+    }
+
+    public function edit(Request $request)
+    {
+        $task = Task::find($request->task);
+        $this->authorize('update', $task);
+
+        if ($task) {
+            return view('tasks.edit', compact('task'));
+        } else {
+            Log::error('An error occurred, while retrieving task details');
+
+            /** @phpstan-ignore-next-line */
+            flash()->success('Failed to edit!');
+            return back();
+        }
     }
 
 
