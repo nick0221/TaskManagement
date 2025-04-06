@@ -19,6 +19,15 @@ class TaskStoreRequest extends FormRequest
         return true;
     }
 
+    public function prepareForValidation(): void
+    {
+        // Convert the title to lowercase before validation
+        $this->merge([
+            'title' => strtolower($this->input('title')),
+        ]);
+    }
+
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -38,7 +47,7 @@ class TaskStoreRequest extends FormRequest
                     return $query->where('user_id', $userId);
                 }),
             ],
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:4048',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:1048',
             'content' => 'required|min:3',
             'published' => Rule::in(PublishStatus::toSelectArray()),
             'status' => Rule::in(TaskStatus::toSelectArray())

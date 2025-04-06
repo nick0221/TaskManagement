@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TaskStatus;
 use App\Http\Requests\TaskStoreRequest;
 use App\Models\Task;
 use Exception;
@@ -16,7 +17,26 @@ class TaskController extends Controller
 
     public function index(Request $request): View
     {
-        return view('tasks.index');
+        $user = (int) auth()->id();
+
+        // Ensure $perPage is an integer or defaults to 5
+        $perPage = (int) $request->query('per_page') ? (int) $request->query('per_page') : 5;
+
+        $statusOptions = TaskStatus::toSelectArray();
+        $sortColumn = (string) $request->filled('sort') ? (string) $request->query('sort') : 'created_at';
+        $sortOrder = (string) $request->filled('order') ? (string) $request->query('order') : 'desc';
+
+        $searchQuery = $request->query('search');
+
+        // Call the filterTasks function from Task model
+        $tasksQuery = Task::filterTasks($user, $request);
+        $tasks = $tasksQuery->orderBy($sortColumn, $sortOrder)->paginate($perPage);
+
+        return view('tasks.index', compact('tasks', 'statusOptions', 'sortColumn', 'sortOrder', 'searchQuery'))
+            ->with('sort', $sortColumn)
+            ->with('order', $sortOrder)
+            ->with('status', $request->input('status', ''));
+
 
     }
 
@@ -42,7 +62,7 @@ class TaskController extends Controller
 
             Task::create($validatedData);
             flash()->success('Product created successfully!');
-           
+
         } catch (Exception $e) {
             // Log the error
             Log::error('An error occurred: '.$e->getMessage());
