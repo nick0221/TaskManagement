@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
 
@@ -81,14 +82,15 @@ class TaskController extends Controller
 
     public function show(Task $task)
     {
-
+        Gate::authorize('view', $task);
         return view('tasks.show', compact('task'));
     }
 
     public function edit(Request $request)
     {
         $task = Task::find($request->task);
-        $this->authorize('update', $task);
+        Gate::authorize('update', $task);
+
 
         if ($task) {
             return view('tasks.edit', compact('task'));
