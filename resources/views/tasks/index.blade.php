@@ -11,7 +11,9 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 
                 <div class="p-6 text-gray-900">
-                    <div class="py-4 flex justify-end gap-x-3">
+                    <div class="flex gap-x-3">
+                        {{-- Filter options --}}
+                        <x-task-components.filter-status/>
                         {{-- Create task --}}
                         <div class="flex items-center">
                             <a href="{{ route('tasks.create') }}"
@@ -19,47 +21,73 @@
                                 <i class="fas fa-plus"></i> Create
                             </a>
                         </div>
+
+                        {{-- Search Textbox --}}
+                        <x-task-components.search-textbox/>
                     </div>
 
-                    <div class="grid grid-cols-2">
-                        {{-- Label Indicator  --}}
+                    <div class="flex gap-x-3">
+                        {{-- Label Indicator --}}
                         <x-task-components.label-indicator/>
-
-                        {{--  Search Textbox  --}}
-                        <x-task-components.search-textbox/>
                     </div>
 
                     <div class="relative overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200 border ">
                             <thead>
                             <tr>
-
                                 <th class="px-6 py-3 bg-gray-50 text-left">
-                                <span
-                                    class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Img</span>
+                                     <span
+                                         class="text-xs font-medium leading-4 tracking-wider text-gray-500 uppercase">
+                                             <a href="{{ route('tasks.index', ['sort' => 'created_at', 'order' => ($sortColumn == 'created_at' && $sortOrder == 'asc') ? 'desc' : 'asc', 'status' => $status, 'search' => Request::input('search'), 'per_page' => $tasks->perPage()]) }}">
+                                                Date &nbsp;
+                                                @if ($sortColumn == 'created_at')
+                                                     @if ($sortOrder == 'asc')
+                                                         <i class="fas fa-sort-up"></i>
+                                                     @else
+                                                         <i class="fas fa-sort-down"></i>
+                                                     @endif
+                                                 @else
+                                                     <i class="fas fa-sort"></i>
+                                                 @endif
+                                             </a>
+                                    </span>
                                 </th>
                                 <th class="px-6 py-3 bg-gray-50 text-left">
-                                      <span
-                                          class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Title</span>
+                                    <span
+                                        class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Img</span>
+                                </th>
+                                <th class="px-6 py-3 bg-gray-50 text-left">
+                                   <span
+                                       class="text-xs font-medium leading-4 tracking-wider text-gray-500 uppercase">
+                                        <a href="{{ route('tasks.index', ['sort' => 'title', 'order' => (Request::input('sort') == 'title' && Request::input('order') == 'asc') ? 'desc' : 'asc', 'status' => Request::input('status'), 'search' => Request::input('search'), 'per_page' => $tasks->perPage()]) }}">
+                                            Title  &nbsp;
+                                            @if (Request::input('sort') == 'title')
+                                                @if (Request::input('order') == 'asc')
+                                                    <i class="fas fa-sort-up"></i>
+                                                @else
+                                                    <i class="fas fa-sort-down"></i>
+                                                @endif
+                                            @else
+                                                <i class="fas fa-sort"></i>
+                                            @endif
+                                        </a>
+                               </span>
                                 </th>
                                 <th class="px-6 py-3 bg-gray-50 text-left">
                                     <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Content</span>
                                 </th>
+
                                 <th class="px-6 py-3 bg-gray-50 text-left">
-                                  <span
-                                      class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Created</span>
+                                    <span
+                                        class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Draft/Published</span>
                                 </th>
                                 <th class="px-6 py-3 bg-gray-50 text-left">
-                                <span
-                                    class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Draft/Published</span>
+                                    <span
+                                        class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Status</span>
                                 </th>
                                 <th class="px-6 py-3 bg-gray-50 text-left">
-                                <span
-                                    class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Status</span>
-                                </th>
-                                <th class="px-6 py-3 bg-gray-50 text-left">
-                                <span
-                                    class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"></span>
+                                    <span
+                                        class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"></span>
                                 </th>
                             </tr>
                             </thead>
@@ -68,7 +96,9 @@
                             @forelse($tasks as $task)
 
                                 <tr class="bg-white">
-
+                                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
+                                        {{ $task->formattedDate  }}
+                                    </td>
                                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                                         <img src="{{ $task->image_path }}"
                                              class="h-auto max-w-full"
@@ -80,9 +110,7 @@
                                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                                         {{ $task->limitedContent  }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
-                                        {{ $task->formattedDate  }}
-                                    </td>
+
                                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                                         {{ $task->publishedStr  }}
                                     </td>
@@ -202,10 +230,7 @@
     </div>
 
     <script>
-        document.getElementById('perPage').addEventListener('change', function () {
-            this.form.submit();
-        });
-
+         
 
         document.addEventListener('alpine:init', () => {
             Alpine.data('modal', () => ({
