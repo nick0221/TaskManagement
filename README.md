@@ -10,10 +10,6 @@
 
   <br>
 
-## See Demo App here
-
-#### <a href="https://tmapps.free.nf/" target="_blank"> >>> Task Management App Demo <<< </a>
-
 ## Installation
 
 Clone the repo locally:
