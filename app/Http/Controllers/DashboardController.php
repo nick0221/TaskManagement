@@ -9,6 +9,9 @@ use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
+    /**
+     * @return View
+     */
     public function index(): View
     {
 

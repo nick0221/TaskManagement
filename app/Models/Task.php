@@ -29,6 +29,11 @@ class Task extends Model
         'user_id'
     ];
 
+    /**
+     * @param  int  $user
+     * @param  Request  $request
+     * @return Builder
+     */
     public static function filterTasks(int $user, Request $request): Builder
     {
 
@@ -49,29 +54,45 @@ class Task extends Model
     }
 
 
+    /**
+     * @return string
+     */
     public function getLimitedTitleAttribute(): string
     {
         return Str::limit((string) $this->title, 20, '...');
     }
 
 
+    /**
+     * @return string
+     */
     public function getLimitedContentAttribute(): string
     {
         return Str::limit($this->content, 20, '...');
     }
 
 
+    /**
+     * @return string
+     */
     public function getFormattedDateAttribute(): string
     {
         return Carbon::parse($this->created_at)->format('M d, Y');
     }
 
 
+    /**
+     * @return string
+     */
     public function getImagePathAttribute(): string
     {
         return $this->image ? asset('storage/task-images/'.$this->image) : asset('images/default.png');
     }
 
+    /**
+     * @param $value
+     * @return void
+     */
     public function setPublishedAttribute($value): void
     {
         $this->attributes['published'] = $value;
@@ -85,17 +106,28 @@ class Task extends Model
     }
 
 
+    /**
+     * @return string
+     */
     public function getPublishedStrAttribute(): string
     {
         $publishedValue = (int) $this->published;
         return PublishStatus::fromValue($publishedValue)->label($publishedValue);
     }
 
+    /**
+     * @param  Task  $record
+     * @return bool
+     */
     public function isAuthorizeToEdit(Task $record): bool
     {
         return $record->status !== TaskStatus::DONE;
     }
 
+    /**
+     * @param  Task  $record
+     * @return bool
+     */
     public function handlePolicyMarkAsTodo(Task $record): bool
     {
         $user = $this->user;
@@ -108,6 +140,10 @@ class Task extends Model
             !app(TaskPolicy::class)->markTodo($user, $record);
     }
 
+    /**
+     * @param  Task  $record
+     * @return bool
+     */
     public function handlePolicyMarkInProgress(Task $record): bool
     {
         $user = $this->user;
@@ -119,6 +155,10 @@ class Task extends Model
             !app(TaskPolicy::class)->markInProgress($user, $record);
     }
 
+    /**
+     * @param  Task  $record
+     * @return bool
+     */
     public function handlePolicyMarkDone(Task $record): bool
     {
         $user = $this->user;
@@ -133,6 +173,9 @@ class Task extends Model
     }
 
 
+    /**
+     * @return string
+     */
     public function getDiffTimeAttribute(): string
     {
         if ($this->created_at) {
@@ -143,6 +186,9 @@ class Task extends Model
     }
 
 
+    /**
+     * @return BelongsTo
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

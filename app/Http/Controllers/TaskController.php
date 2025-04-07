@@ -8,7 +8,9 @@ use App\Http\Requests\TaskStoreRequest;
 use App\Http\Requests\TaskUpdateRequest;
 use App\Models\Task;
 use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -19,6 +21,10 @@ use Illuminate\Support\Str;
 class TaskController extends Controller
 {
 
+    /**
+     * @param  Request  $request
+     * @return View
+     */
     public function index(Request $request): View
     {
         $user = (int) auth()->id();
@@ -44,6 +50,10 @@ class TaskController extends Controller
 
     }
 
+    /**
+     * @param  TaskStoreRequest  $request
+     * @return RedirectResponse
+     */
     public function store(TaskStoreRequest $request): RedirectResponse
     {
 
@@ -78,18 +88,29 @@ class TaskController extends Controller
 
     }
 
+    /**
+     * @return View
+     */
     public function create(): View
     {
         return view('tasks.create');
     }
 
-    public function show(Task $task)
+    /**
+     * @param  Task  $task
+     * @return View
+     */
+    public function show(Task $task): View
     {
         Gate::authorize('view', $task);
         return view('tasks.show', compact('task'));
     }
 
 
+    /**
+     * @param  Request  $request
+     * @return Factory|View|Application|RedirectResponse|object
+     */
     public function edit(Request $request)
     {
         $task = Task::find($request->task);
@@ -106,6 +127,11 @@ class TaskController extends Controller
         }
     }
 
+    /**
+     * @param  TaskUpdateRequest  $request
+     * @param  Task  $task
+     * @return RedirectResponse
+     */
     public function update(TaskUpdateRequest $request, Task $task): RedirectResponse
     {
         Gate::authorize('update', $task);
@@ -130,6 +156,11 @@ class TaskController extends Controller
     }
 
 
+    /**
+     * @param $id
+     * @param $progress
+     * @return RedirectResponse
+     */
     public function upStatus($id, $progress): RedirectResponse
     {
         $task = Task::find($id);
@@ -161,6 +192,10 @@ class TaskController extends Controller
     }
 
 
+    /**
+     * @param  Task  $task
+     * @return RedirectResponse
+     */
     public function destroy(Task $task): RedirectResponse
     {
         // Delete the task (soft delete)
